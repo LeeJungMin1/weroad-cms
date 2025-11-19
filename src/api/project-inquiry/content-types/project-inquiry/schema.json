@@ -1,0 +1,60 @@
+{
+  "kind": "collectionType",
+  "collectionName": "project_inquiries",
+  "info": {
+    "singularName": "project-inquiry",
+    "pluralName": "project-inquiries",
+    "displayName": "Project Inquiry"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "inquiry_type": {
+      "type": "enumeration",
+      "enum": [
+        "project",
+        "tech",
+        "partnership",
+        "service",
+        "public",
+        "etc"
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "company": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "position": {
+      "type": "string"
+    },
+    "project_url": {
+      "type": "text"
+    },
+    "attachment": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "agree_privacy": {
+      "type": "boolean"
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}
