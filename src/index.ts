@@ -18,3 +18,5 @@ export default {
    */
   bootstrap(/* { strapi }: { strapi: Core.Strapi } */) {},
 };
+
+// 서버 실행: npm run develop
