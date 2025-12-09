@@ -430,6 +430,40 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCompanyPageCompanyPage extends Struct.SingleTypeSchema {
+  collectionName: 'company_pages';
+  info: {
+    displayName: 'Company Page';
+    pluralName: 'company-pages';
+    singularName: 'company-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    hero_image: Schema.Attribute.Media<'images' | 'files'>;
+    hero_subtitle: Schema.Attribute.String;
+    hero_title: Schema.Attribute.String & Schema.Attribute.Required;
+    hero_video: Schema.Attribute.Media<'files' | 'videos'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::company-page.company-page'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    sections: Schema.Attribute.Component<'page.section', true>;
+    seo_description: Schema.Attribute.String;
+    seo_title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiProjectInquiryProjectInquiry
   extends Struct.CollectionTypeSchema {
   collectionName: 'project_inquiries';
@@ -983,6 +1017,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::company-page.company-page': ApiCompanyPageCompanyPage;
       'api::project-inquiry.project-inquiry': ApiProjectInquiryProjectInquiry;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

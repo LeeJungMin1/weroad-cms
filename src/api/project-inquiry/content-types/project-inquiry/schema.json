@@ -13,14 +13,7 @@
   "attributes": {
     "inquiry_type": {
       "type": "enumeration",
-      "enum": [
-        "project",
-        "tech",
-        "partnership",
-        "service",
-        "public",
-        "etc"
-      ]
+      "enum": ["project", "tech", "partnership", "service", "public", "etc"]
     },
     "name": {
       "type": "string"
@@ -43,12 +36,7 @@
     "attachment": {
       "type": "media",
       "multiple": true,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
+      "allowedTypes": ["images", "files", "videos", "audios"]
     },
     "agree_privacy": {
       "type": "boolean"

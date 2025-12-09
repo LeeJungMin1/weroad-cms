@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_page_sections",
+  "info": {
+    "displayName": "Section",
+    "description": "회사 소개 페이지의 개별 섹션 (이미지/영상/텍스트)"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "body": {
+      "type": "richtext"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "video": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["videos"]
+    },
+    "align": {
+      "type": "enumeration",
+      "enum": ["left", "right", "center"],
+      "default": "left"
+    }
+  }
+}
