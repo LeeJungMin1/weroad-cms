@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_news_tags",
+  "info": {
+    "displayName": "tag",
+    "icon": "hashtag"
+  },
+  "options": {},
+  "attributes": {
+    "value": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}
