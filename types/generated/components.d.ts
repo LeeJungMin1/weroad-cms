@@ -1,5 +1,16 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface NewsTag extends Struct.ComponentSchema {
+  collectionName: 'components_news_tags';
+  info: {
+    displayName: 'tag';
+    icon: 'hashtag';
+  };
+  attributes: {
+    value: Schema.Attribute.String;
+  };
+}
+
 export interface PageSection extends Struct.ComponentSchema {
   collectionName: 'components_page_sections';
   info: {
@@ -19,6 +30,7 @@ export interface PageSection extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'news.tag': NewsTag;
       'page.section': PageSection;
     }
   }
