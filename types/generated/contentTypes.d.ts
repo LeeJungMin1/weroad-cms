@@ -525,9 +525,7 @@ export interface ApiProjectInquiryProjectInquiry
       Schema.Attribute.Private;
     description: Schema.Attribute.Text;
     email: Schema.Attribute.Email;
-    inquiry_type: Schema.Attribute.Enumeration<
-      ['project', 'tech', 'partnership', 'service', 'public', 'etc']
-    >;
+    inquiry_type: Schema.Attribute.JSON;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
