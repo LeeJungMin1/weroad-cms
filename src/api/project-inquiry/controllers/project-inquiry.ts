@@ -24,6 +24,37 @@ export default factories.createCoreController(
         return `${base}${path}`;
       };
 
+      const ALLOWED_TYPES = [
+        "project",
+        "tech",
+        "product",
+        "service",
+        "partnership",
+        "etc",
+      ];
+
+      let inquiryTypes: string[] = [];
+
+      if (Array.isArray(body.inquiry_type)) {
+        inquiryTypes = body.inquiry_type;
+      } else if (typeof body.inquiry_type === "string") {
+        try {
+          const parsed = JSON.parse(body.inquiry_type);
+          if (Array.isArray(parsed)) {
+            inquiryTypes = parsed;
+          } else if (typeof parsed === "string") {
+            inquiryTypes = [parsed];
+          }
+        } catch {
+          // 그냥 단일 문자열인 경우
+          if (body.inquiry_type.trim() !== "") {
+            inquiryTypes = [body.inquiry_type.trim()];
+          }
+        }
+      }
+
+      inquiryTypes = inquiryTypes.filter((t) => ALLOWED_TYPES.includes(t));
+
       // 1) 파일 업로드
       let fileIds: number[] = [];
       const PROJECT_INQUIRY_FOLDER_ID = 3; // Project Inquiries 폴더 ID
@@ -53,22 +84,33 @@ export default factories.createCoreController(
         body.agree_privacy === "true" ||
         body.agree_privacy === "on";
 
+      // 3) 엔트리 생성용 데이터 구성
+      const dataToCreate: any = {
+        inquiry_type: inquiryTypes,
+        name: body.name,
+        company: body.company,
+        phone: body.phone,
+        email: body.email,
+        position: body.position,
+        agree_privacy: agreePrivacy,
+      };
+
+      // 선택값: 비어 있지 않을 때만 넣기
+      if (body.project_url && String(body.project_url).trim() !== "") {
+        dataToCreate.project_url = body.project_url;
+      }
+      if (body.description && String(body.description).trim() !== "") {
+        dataToCreate.description = body.description;
+      }
+      if (fileIds.length > 0) {
+        dataToCreate.attachment = fileIds;
+      }
+
       // 3) Project Inquiry 엔트리 생성 (+ 첨부파일 관계 연결)
       const entry = await strapi.entityService.create(
         "api::project-inquiry.project-inquiry",
         {
-          data: {
-            inquiry_type: body.inquiry_type,
-            name: body.name,
-            company: body.company,
-            phone: body.phone,
-            email: body.email,
-            position: body.position,
-            project_url: body.project_url,
-            description: body.description,
-            agree_privacy: agreePrivacy,
-            attachment: fileIds, // ← 미디어 필드에 파일 id 연결
-          },
+          data: dataToCreate,
         }
       );
 
@@ -90,12 +132,27 @@ export default factories.createCoreController(
         })
         .join("");
 
+      // 라벨 매핑
+      const TYPE_LABELS: Record<string, string> = {
+        project: "프로젝트 문의",
+        tech: "기술 문의",
+        product: "제품 문의",
+        service: "서비스 문의",
+        partnership: "제휴 문의",
+        etc: "기타 문의",
+      };
+
       // 5) 메일 HTML 구성 (전에 lifecycles.ts에서 쓰던 템플릿 그대로)
       const data: any = entry;
 
+      const inquiryTypeText =
+        Array.isArray(data.inquiry_type) && data.inquiry_type.length > 0
+          ? data.inquiry_type.map((t: string) => TYPE_LABELS[t] || t).join(", ")
+          : "미선택";
+
       const html = `
         <h2>[위로드엑스 프로젝트 문의]</h2>
-        <p><b>문의 유형:</b> ${data.inquiry_type}</p>
+        <p><b>문의 유형:</b> ${inquiryTypeText}</p>
         <p><b>이름:</b> ${data.name}</p>
         <p><b>회사명:</b> ${data.company}</p>
         <p><b>전화번호:</b> ${data.phone}</p>
